@@ -1,0 +1,9 @@
+\ Model (null)_copy
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+\ Signature: 0x267ae670d65fb349
+Minimize
+ 
+Subject To
+ c2_0: = 1
+Bounds
+End
