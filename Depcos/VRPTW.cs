@@ -23,7 +23,7 @@ public class VRPTW
         bool customerSection = false;
         bool vechicleSection = false;
 
-        foreach (var line in lines)
+        foreach (var line in lines)//plik solomona z dodatkowymi danymi - liczba pojazdow - moze sie przyda
         {
             string trimmedLine = line.Trim();
             if (string.IsNullOrEmpty(trimmedLine)) continue;
@@ -73,7 +73,7 @@ public class VRPTW
         }
     }
 
-    private void ParseSolomonFile(string filePath)
+    private void ParseSolomonFile(string filePath)//typowy plik solomona
     {
         string[] lines = File.ReadAllLines(filePath);
         foreach (var line in lines)
@@ -103,7 +103,7 @@ public class VRPTW
         }
     }
 
-    public double[,] createDistanceMatrix()
+    public double[,] createDistanceMatrix() // funkcja generująca macierz odleglosci
     {
         double[,] distanceMatrix = new double[Customers.Count, Customers.Count];
         for(int i = 0; i < Customers.Count; i++)
@@ -116,11 +116,10 @@ public class VRPTW
                 distanceMatrix[i, j] = distance;
             }
         }
-        Console.Write(distanceMatrix[0,1]);
         return distanceMatrix;
     }
 
-    public void Solve()
+    public void Solve() // raczej do usuniecia
     {
         try
         {
