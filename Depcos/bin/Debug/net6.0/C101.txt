@@ -1,5 +1,6 @@
 C101
 VEHICLE
+Number Capacity
 25 200
 
 CUSTOMER
