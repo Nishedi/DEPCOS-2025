@@ -14,12 +14,14 @@ public class VRPTW
     {
         Customers = new List<Customer>();
         ParseSolomonFile(filePath);
+        createDistanceMatrix();
     }
 
-    private void ParseSolomonFile(string filePath)
+    private void ParseSolomonFileWithDetails(string filePath)
     {
         string[] lines = File.ReadAllLines(filePath);
         bool customerSection = false;
+        bool vechicleSection = false;
 
         foreach (var line in lines)
         {
@@ -30,11 +32,15 @@ public class VRPTW
             {
                 continue;
             }
-            else if (trimmedLine.StartsWith("Number Capacity"))
+            else if (trimmedLine.StartsWith("NUMBER"))
             {
-                var parts = trimmedLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                NumberOfVehicles = int.Parse(parts[1]);
-                VehicleCapacity = int.Parse(parts[2]);
+                vechicleSection = true;
+                continue;
+            }
+            else if (vechicleSection)
+            {
+                NumberOfVehicles = int.Parse(trimmedLine);
+                vechicleSection=false;
             }
             else if (trimmedLine.StartsWith("CUSTOMER"))
             {
@@ -65,6 +71,53 @@ public class VRPTW
                 }
             }
         }
+    }
+
+    private void ParseSolomonFile(string filePath)
+    {
+        string[] lines = File.ReadAllLines(filePath);
+        foreach (var line in lines)
+        {
+            string trimmedLine = line.Trim();
+            var parts = trimmedLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length != 7) continue;
+
+            try
+            {
+                Customers.Add(new Customer
+                {
+                    Id = int.Parse(parts[0]),
+                    X = double.Parse(parts[1], CultureInfo.InvariantCulture),
+                    Y = double.Parse(parts[2], CultureInfo.InvariantCulture),
+                    Demand = double.Parse(parts[3], CultureInfo.InvariantCulture),
+                    bv = double.Parse(parts[4], CultureInfo.InvariantCulture),
+                    dv = double.Parse(parts[5], CultureInfo.InvariantCulture),
+                    ServiceTime = double.Parse(parts[6], CultureInfo.InvariantCulture)
+                });
+                
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Błąd parsowania linii: {trimmedLine}. Szczegóły: {ex.Message}");
+            }
+        }
+    }
+
+    public double[,] createDistanceMatrix()
+    {
+        double[,] distanceMatrix = new double[Customers.Count, Customers.Count];
+        for(int i = 0; i < Customers.Count; i++)
+        {
+            for(int j = 0; j < Customers.Count; j++)
+            {
+                double deltaX = Customers[j].X - Customers[i].X;
+                double deltaY = Customers[j].Y - Customers[i].Y;
+                double distance = Math.Sqrt(deltaX * deltaX + deltaY * deltaY); 
+                distanceMatrix[i, j] = distance;
+            }
+        }
+        Console.Write(distanceMatrix[0,1]);
+        return distanceMatrix;
     }
 
     public void Solve()

@@ -4,6 +4,6 @@
     {
         string filePath = "C101.txt"; 
         VRPTW vrptw = new VRPTW(filePath);
-        vrptw.Solve();
+        /*vrptw.Solve();*/
     }
 }

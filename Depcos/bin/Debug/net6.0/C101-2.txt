@@ -1,3 +1,9 @@
+C101
+VEHICLE
+NUMBER
+25
+
+CUSTOMER
 CUST NO.   XCOORD.   YCOORD.   DEMAND   READY TIME   DUE DATE   SERVICE TIME
     1      40.00      50.00       0.00       0.00    1236.00       0.00
     2      45.00      68.00      10.00     912.00     967.00      90.00
