@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Gurobi.Optimizer" Version="12.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="gurobi120.netstandard20">
       <HintPath>..\..\..\..\..\gurobi1200\win64\lib\gurobi120.netstandard20.dll</HintPath>
     </Reference>

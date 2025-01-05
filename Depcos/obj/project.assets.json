@@ -1,26 +1,104 @@
 {
   "version": 3,
   "targets": {
-    "net6.0": {}
+    "net6.0": {
+      "Gurobi.Optimizer/12.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/gurobi120.netstandard20.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/gurobi120.netstandard20.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "build/Gurobi.Optimizer.targets": {}
+        },
+        "runtimeTargets": {
+          "runtimes/linux-arm64/native/libgurobi120.so": {
+            "assetType": "native",
+            "rid": "linux-arm64"
+          },
+          "runtimes/linux-x64/native/libgurobi120.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/osx-arm64/native/libgurobi120.dylib": {
+            "assetType": "native",
+            "rid": "osx-arm64"
+          },
+          "runtimes/osx-x64/native/libgurobi120.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/win-x64/native/gurobi120.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          }
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Gurobi.Optimizer/12.0.0": {
+      "sha512": "Q7dJ/QkrGtjTfsckMxTF8wRETz4ZkJnwnefdazNsS3RHrPV4S6uhyqbRSLwHSN/j/Y+WCX3kVwKnuASAu70jSg==",
+      "type": "package",
+      "path": "gurobi.optimizer/12.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "build/Gurobi.Optimizer.targets",
+        "content/logo-final.png",
+        "docs/readme.md",
+        "gurobi.optimizer.12.0.0.nupkg.sha512",
+        "gurobi.optimizer.nuspec",
+        "lib/netstandard2.0/gurobi120.netstandard20.dll",
+        "lib/netstandard2.0/gurobi120.netstandard20.xml",
+        "licenses/armpl.txt",
+        "licenses/checknum.txt",
+        "licenses/chillbuff.txt",
+        "licenses/curl.txt",
+        "licenses/jsmn.txt",
+        "licenses/l8w8jwt.txt",
+        "licenses/mbedtls.txt",
+        "licenses/openssl.txt",
+        "licenses/python.txt",
+        "licenses/zlib.txt",
+        "runtimes/linux-arm64/native/libgurobi120.so",
+        "runtimes/linux-x64/native/libgurobi120.so",
+        "runtimes/osx-arm64/native/libgurobi120.dylib",
+        "runtimes/osx-x64/native/libgurobi120.dylib",
+        "runtimes/win-x64/native/gurobi120.dll"
+      ]
+    }
+  },
   "projectFileDependencyGroups": {
-    "net6.0": []
+    "net6.0": [
+      "Gurobi.Optimizer >= 12.0.0"
+    ]
   },
   "packageFolders": {
-    "C:\\Users\\KONRAD PEMPERA\\.nuget\\packages\\": {}
+    "C:\\Users\\MichałJaroszczuk\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\KONRAD PEMPERA\\Desktop\\Depcos\\Depcos\\Depcos.csproj",
+      "projectUniqueName": "C:\\Users\\MichałJaroszczuk\\Source\\Repos\\DEPCOS-2025-temp-name-\\Depcos\\Depcos.csproj",
       "projectName": "Depcos",
-      "projectPath": "C:\\Users\\KONRAD PEMPERA\\Desktop\\Depcos\\Depcos\\Depcos.csproj",
-      "packagesPath": "C:\\Users\\KONRAD PEMPERA\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\KONRAD PEMPERA\\Desktop\\Depcos\\Depcos\\obj\\",
+      "projectPath": "C:\\Users\\MichałJaroszczuk\\Source\\Repos\\DEPCOS-2025-temp-name-\\Depcos\\Depcos.csproj",
+      "packagesPath": "C:\\Users\\MichałJaroszczuk\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\MichałJaroszczuk\\Source\\Repos\\DEPCOS-2025-temp-name-\\Depcos\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\KONRAD PEMPERA\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\MichałJaroszczuk\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -28,6 +106,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -40,27 +119,57 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
       "net6.0": {
         "targetAlias": "net6.0",
+        "dependencies": {
+          "Gurobi.Optimizer": {
+            "target": "Package",
+            "version": "[12.0.0, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",
           "net47",
           "net471",
           "net472",
-          "net48"
+          "net48",
+          "net481"
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[6.0.29, 6.0.29]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[6.0.29, 6.0.29]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[6.0.29, 6.0.29]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[6.0.29, 6.0.29]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.302\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204\\RuntimeIdentifierGraph.json"
       }
     }
   }

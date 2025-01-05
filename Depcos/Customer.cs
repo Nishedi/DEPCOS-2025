@@ -13,6 +13,8 @@ public class Customer
     public double bv { get; set; }
     public double dv { get; set; }
     public double ServiceTime { get; set; }
+    public double penalty { get; set; }
+
 
     public override string ToString()
     {

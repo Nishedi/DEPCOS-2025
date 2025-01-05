@@ -1,8 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "ktJ8vy1q2njWyVUEaVbHruHHqJZ1F5VIwYUGZOEKmpQybF3rCI04p/zhQd7IZ50ZLSoH+nQRQABiF+6chE6pFw==",
+  "dgSpecHash": "2qGQIW8hNx8u8FRre5EU2YJ1angTCpsSebU8iOju424guO3spUbC8TZBRIf8JtP8ag/5ciFsB2HlkxTQ2AI+4w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\KONRAD PEMPERA\\Desktop\\Depcos\\Depcos\\Depcos.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\MichałJaroszczuk\\Source\\Repos\\DEPCOS-2025-temp-name-\\Depcos\\Depcos.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\MichałJaroszczuk\\.nuget\\packages\\gurobi.optimizer\\12.0.0\\gurobi.optimizer.12.0.0.nupkg.sha512",
+    "C:\\Users\\MichałJaroszczuk\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.29\\microsoft.windowsdesktop.app.ref.6.0.29.nupkg.sha512",
+    "C:\\Users\\MichałJaroszczuk\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.29\\microsoft.netcore.app.ref.6.0.29.nupkg.sha512",
+    "C:\\Users\\MichałJaroszczuk\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.29\\microsoft.aspnetcore.app.ref.6.0.29.nupkg.sha512",
+    "C:\\Users\\MichałJaroszczuk\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.29\\microsoft.netcore.app.host.win-x64.6.0.29.nupkg.sha512"
+  ],
   "logs": []
 }

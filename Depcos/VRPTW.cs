@@ -3,18 +3,48 @@ using System.Collections.Generic;
 using System.IO;
 using System.Globalization;
 using Gurobi;
+using Depcos;
 
 public class VRPTW
 {
     public List<Customer> Customers { get; private set; }
+    public List<Vehicle> Vehicles { get; private set; }
+    public List<Customer> InitialGTR { get; private set; }
     public int VehicleCapacity { get; private set; }
     public int NumberOfVehicles { get; private set; }
+    public double[,] distanceMatrix { get; private set; }
 
-    public VRPTW(string filePath)
+    public VRPTW(string filePath, int vehicleNumber)
     {
         Customers = new List<Customer>();
+        Vehicles = new List<Vehicle>();
+
+        // Adding set of vehicles
+        for (int i = 0; i < vehicleNumber; i++)
+        {
+            Vehicles.Add(new Vehicle
+            {
+                id = i,
+                bv = 0,
+                dv = 400,
+                time = 0
+            });
+        }
+
+        // Adding central depot to customer list
+        Customers.Add(new Customer
+        {
+            Id = 0,
+            X = 0,
+            Y = 0,
+            Demand = 0,
+            bv = 0,
+            dv = 10000000,
+            ServiceTime = 0,
+            penalty = 2
+        });
         ParseSolomonFile(filePath);
-        createDistanceMatrix();
+        distanceMatrix = createDistanceMatrix();
     }
 
     private void ParseSolomonFileWithDetails(string filePath)
@@ -62,7 +92,8 @@ public class VRPTW
                         Demand = double.Parse(parts[3], CultureInfo.InvariantCulture),
                         bv = double.Parse(parts[4], CultureInfo.InvariantCulture),
                         dv = double.Parse(parts[5], CultureInfo.InvariantCulture),
-                        ServiceTime = double.Parse(parts[6], CultureInfo.InvariantCulture)
+                        ServiceTime = double.Parse(parts[6], CultureInfo.InvariantCulture),
+                        penalty = 2
                     });
                 }
                 catch (FormatException ex)
@@ -92,7 +123,8 @@ public class VRPTW
                     Demand = double.Parse(parts[3], CultureInfo.InvariantCulture),
                     bv = double.Parse(parts[4], CultureInfo.InvariantCulture),
                     dv = double.Parse(parts[5], CultureInfo.InvariantCulture),
-                    ServiceTime = double.Parse(parts[6], CultureInfo.InvariantCulture)
+                    ServiceTime = double.Parse(parts[6], CultureInfo.InvariantCulture),
+                    penalty = 2
                 });
                 
             }
@@ -117,6 +149,81 @@ public class VRPTW
             }
         }
         return distanceMatrix;
+    }
+
+    public void createInitialGTR()
+    {
+        InitialGTR = new List<Customer>();
+        int vehicleNumber = 0;
+        double vehicleTimeLimit = 0;
+        double returnTime = 0; 
+        double arrivalTime = 0;
+        double windowExceed = 0;
+
+        InitialGTR.Add(Customers[0]);
+        foreach (var customer in Customers)
+        {
+            if (customer.Id != 0)
+            {
+                vehicleTimeLimit = Vehicles[vehicleNumber].dv - Vehicles[vehicleNumber].bv;
+                returnTime = distanceMatrix[customer.Id, 0];
+                arrivalTime = Vehicles[vehicleNumber].time + distanceMatrix[customer.Id - 1, customer.Id];
+                windowExceed = new[] {customer.bv - arrivalTime, 0, arrivalTime - customer.dv + customer.ServiceTime}.Max();
+                if (arrivalTime + customer.ServiceTime + returnTime + customer.penalty * windowExceed <= vehicleTimeLimit)
+                {
+                    InitialGTR.Add(customer);
+                    Vehicles[vehicleNumber].time = arrivalTime + customer.ServiceTime + customer.penalty * windowExceed;
+                }
+                else
+                {
+                    InitialGTR.Add(Customers[0]);
+                    vehicleNumber++;
+                    InitialGTR.Add(customer);
+                    Vehicles[vehicleNumber].time = Vehicles[vehicleNumber].time + distanceMatrix[0, customer.Id] + customer.ServiceTime + customer.penalty * windowExceed;
+                }
+            }
+
+        }
+        InitialGTR.Add(Customers[0]);
+
+    }
+
+    public string printGTR(List<Customer> GTR)
+    {
+        string GTRString = "";
+        foreach (var node in GTR)
+        {
+            GTRString += node.Id.ToString() + " ";
+
+        }
+        return GTRString;
+
+    }
+
+    public double calculateCostGTR(List<Customer> GTR)
+    {
+        double cost = 0;
+        double travelTime = 0;
+        double time = 0;
+        double windowExceed = 0;
+        for (int i = 1; i < GTR.Count; i++)
+        { 
+            travelTime = distanceMatrix[GTR[i - 1].Id, GTR[i].Id];
+            time += travelTime;
+            if (GTR[i].Id == 0)
+            {
+                cost = cost + time;
+                time = 0;
+            }
+            else
+            {
+                windowExceed = new[] { GTR[i].bv - time, 0, time - GTR[i].dv + GTR[i].ServiceTime }.Max();
+                time += GTR[i].penalty * windowExceed;
+                time += GTR[i].ServiceTime;
+            }
+        }
+        return cost;
+
     }
 
     public void Solve() // raczej do usuniecia
