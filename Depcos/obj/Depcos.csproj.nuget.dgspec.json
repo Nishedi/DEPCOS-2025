@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\MichałJaroszczuk\\Source\\Repos\\DEPCOS-2025-temp-name-\\Depcos\\Depcos.csproj": {}
+    "C:\\Users\\MichałJaroszczuk\\source\\repos\\DEPCOS-2025-temp-name-\\Depcos\\Depcos.csproj": {}
   },
   "projects": {
-    "C:\\Users\\MichałJaroszczuk\\Source\\Repos\\DEPCOS-2025-temp-name-\\Depcos\\Depcos.csproj": {
+    "C:\\Users\\MichałJaroszczuk\\source\\repos\\DEPCOS-2025-temp-name-\\Depcos\\Depcos.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\MichałJaroszczuk\\Source\\Repos\\DEPCOS-2025-temp-name-\\Depcos\\Depcos.csproj",
+        "projectUniqueName": "C:\\Users\\MichałJaroszczuk\\source\\repos\\DEPCOS-2025-temp-name-\\Depcos\\Depcos.csproj",
         "projectName": "Depcos",
-        "projectPath": "C:\\Users\\MichałJaroszczuk\\Source\\Repos\\DEPCOS-2025-temp-name-\\Depcos\\Depcos.csproj",
+        "projectPath": "C:\\Users\\MichałJaroszczuk\\source\\repos\\DEPCOS-2025-temp-name-\\Depcos\\Depcos.csproj",
         "packagesPath": "C:\\Users\\MichałJaroszczuk\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\MichałJaroszczuk\\Source\\Repos\\DEPCOS-2025-temp-name-\\Depcos\\obj\\",
+        "outputPath": "C:\\Users\\MichałJaroszczuk\\source\\repos\\DEPCOS-2025-temp-name-\\Depcos\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

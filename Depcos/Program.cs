@@ -7,7 +7,8 @@
         VRPTW vrptw = new VRPTW(filePath, 100);
         /*vrptw.Solve();*/
         vrptw.createInitialGTR();
-        Console.WriteLine(vrptw.Customers.Count);
+        //Console.WriteLine(vrptw.printDistanceMatrix());
+ 
         Console.WriteLine(vrptw.printGTR(vrptw.InitialGTR));
         Console.WriteLine(vrptw.calculateCostGTR(vrptw.InitialGTR));
     }

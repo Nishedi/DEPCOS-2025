@@ -200,6 +200,21 @@ public class VRPTW
 
     }
 
+    public string printDistanceMatrix()
+    {
+        string matrixString = "";
+        for (int i = 0; i < distanceMatrix.GetLength(0); i++)
+        {
+            for (int j = 0; j < distanceMatrix.GetLength(0); j++)
+            {
+                matrixString += distanceMatrix[i, j] + " ";
+            }
+            matrixString += "\n";
+        }
+        return matrixString;
+    }
+
+
     public double calculateCostGTR(List<Customer> GTR)
     {
         double cost = 0;
