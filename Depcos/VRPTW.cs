@@ -32,17 +32,7 @@ public class VRPTW
         }
 
         // Adding central depot to customer list
-        Customers.Add(new Customer
-        {
-            Id = 0,
-            X = 0,
-            Y = 0,
-            Demand = 0,
-            bv = 0,
-            dv = 10000000,
-            ServiceTime = 0,
-            penalty = 2
-        });
+
         ParseSolomonFile(filePath);
         distanceMatrix = createDistanceMatrix();
     }
@@ -86,7 +76,7 @@ public class VRPTW
                 {
                     Customers.Add(new Customer
                     {
-                        Id = int.Parse(parts[0]),
+                        Id = int.Parse(parts[0])-1,
                         X = double.Parse(parts[1], CultureInfo.InvariantCulture),
                         Y = double.Parse(parts[2], CultureInfo.InvariantCulture),
                         Demand = double.Parse(parts[3], CultureInfo.InvariantCulture),
@@ -117,7 +107,7 @@ public class VRPTW
             {
                 Customers.Add(new Customer
                 {
-                    Id = int.Parse(parts[0]),
+                    Id = int.Parse(parts[0])-1,
                     X = double.Parse(parts[1], CultureInfo.InvariantCulture),
                     Y = double.Parse(parts[2], CultureInfo.InvariantCulture),
                     Demand = double.Parse(parts[3], CultureInfo.InvariantCulture),
@@ -166,9 +156,47 @@ public class VRPTW
             if (customer.Id != 0)
             {
                 vehicleTimeLimit = Vehicles[vehicleNumber].dv - Vehicles[vehicleNumber].bv;
+                Console.WriteLine(customer.ServiceTime);
                 returnTime = distanceMatrix[customer.Id, 0];
                 arrivalTime = Vehicles[vehicleNumber].time + distanceMatrix[customer.Id - 1, customer.Id];
                 windowExceed = new[] {customer.bv - arrivalTime, 0, arrivalTime - customer.dv + customer.ServiceTime}.Max();
+                if (arrivalTime + customer.ServiceTime + returnTime + customer.penalty * windowExceed <= vehicleTimeLimit)
+                {
+                    InitialGTR.Add(customer);
+                    Vehicles[vehicleNumber].time = arrivalTime + customer.ServiceTime + customer.penalty * windowExceed;
+                }
+                else
+                {
+                    InitialGTR.Add(Customers[0]);
+                    vehicleNumber++;
+                    InitialGTR.Add(customer);
+                    Vehicles[vehicleNumber].time = Vehicles[vehicleNumber].time + distanceMatrix[0, customer.Id] + customer.ServiceTime + customer.penalty * windowExceed;
+                }
+            }
+
+        }
+        InitialGTR.Add(Customers[0]);
+
+    }
+
+    public void createGreedyGTR()
+    {
+        InitialGTR = new List<Customer>();
+        int vehicleNumber = 0;
+        double vehicleTimeLimit = 0;
+        double returnTime = 0;
+        double arrivalTime = 0;
+        double windowExceed = 0;
+
+        InitialGTR.Add(Customers[0]);
+        foreach (var customer in Customers)
+        {
+            if (customer.Id != 0)
+            {
+                vehicleTimeLimit = Vehicles[vehicleNumber].dv - Vehicles[vehicleNumber].bv;
+                returnTime = distanceMatrix[customer.Id, 0];
+                arrivalTime = Vehicles[vehicleNumber].time + distanceMatrix[customer.Id - 1, customer.Id];
+                windowExceed = new[] { customer.bv - arrivalTime, 0, arrivalTime - customer.dv + customer.ServiceTime }.Max();
                 if (arrivalTime + customer.ServiceTime + returnTime + customer.penalty * windowExceed <= vehicleTimeLimit)
                 {
                     InitialGTR.Add(customer);

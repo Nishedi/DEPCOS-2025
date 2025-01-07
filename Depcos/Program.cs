@@ -3,7 +3,7 @@
     public static void Main()
     {
         //string filePath = "C101.txt";
-        string filePath = "CTEST.txt";
+        string filePath = "CTEST2.txt";
         VRPTW vrptw = new VRPTW(filePath, 100);
         /*vrptw.Solve();*/
         vrptw.createInitialGTR();
