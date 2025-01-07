@@ -25,8 +25,7 @@ public class VRPTW
             Vehicles.Add(new Vehicle
             {
                 id = i,
-                bv = 0,
-                dv = Customers[0].dv,
+                wv = Customers[0].dv,
                 time = 0
             });
         }
@@ -149,19 +148,22 @@ public class VRPTW
         double arrivalTime = 0;
         double windowExceed = 0;
 
-        InitialGTR.Add(Customers[0]);
+        
         foreach (var customer in Customers)
         {
             if (customer.Id != 0)
             {
-                vehicleTimeLimit = Vehicles[vehicleNumber].dv - Vehicles[vehicleNumber].bv;
+                vehicleTimeLimit = Vehicles[vehicleNumber].wv;
                 returnTime = distanceMatrix[customer.Id, 0];
                 arrivalTime = Vehicles[vehicleNumber].time + distanceMatrix[customer.Id - 1, customer.Id];
                 windowExceed = new[] {customer.bv - arrivalTime, 0, arrivalTime - customer.dv + customer.ServiceTime}.Max();
                 if (arrivalTime + customer.ServiceTime + returnTime + customer.penalty * windowExceed <= vehicleTimeLimit)
                 {
+                    if (InitialGTR.Count == 0)
+                        InitialGTR.Add(Customers[0]);
                     InitialGTR.Add(customer);
                     Vehicles[vehicleNumber].time = arrivalTime + customer.ServiceTime + customer.penalty * windowExceed;
+                    
                 }
                 else
                 {
@@ -191,7 +193,7 @@ public class VRPTW
         {
             if (customer.Id != 0)
             {
-                vehicleTimeLimit = Vehicles[vehicleNumber].dv - Vehicles[vehicleNumber].bv;
+                vehicleTimeLimit = Vehicles[vehicleNumber].wv;
                 returnTime = distanceMatrix[customer.Id, 0];
                 arrivalTime = Vehicles[vehicleNumber].time + distanceMatrix[customer.Id - 1, customer.Id];
                 windowExceed = new[] { customer.bv - arrivalTime, 0, arrivalTime - customer.dv + customer.ServiceTime }.Max();
