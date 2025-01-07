@@ -18,7 +18,7 @@ public class VRPTW
     {
         Customers = new List<Customer>();
         Vehicles = new List<Vehicle>();
-
+        ParseSolomonFile(filePath);
         // Adding set of vehicles
         for (int i = 0; i < vehicleNumber; i++)
         {
@@ -26,14 +26,13 @@ public class VRPTW
             {
                 id = i,
                 bv = 0,
-                dv = 400,
+                dv = Customers[0].dv,
                 time = 0
             });
         }
-
         // Adding central depot to customer list
 
-        ParseSolomonFile(filePath);
+        
         distanceMatrix = createDistanceMatrix();
     }
 
@@ -156,7 +155,6 @@ public class VRPTW
             if (customer.Id != 0)
             {
                 vehicleTimeLimit = Vehicles[vehicleNumber].dv - Vehicles[vehicleNumber].bv;
-                Console.WriteLine(customer.ServiceTime);
                 returnTime = distanceMatrix[customer.Id, 0];
                 arrivalTime = Vehicles[vehicleNumber].time + distanceMatrix[customer.Id - 1, customer.Id];
                 windowExceed = new[] {customer.bv - arrivalTime, 0, arrivalTime - customer.dv + customer.ServiceTime}.Max();
