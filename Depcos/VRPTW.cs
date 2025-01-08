@@ -182,38 +182,99 @@ public class VRPTW
     public void createGreedyGTR()
     {
         InitialGTR = new List<Customer>();
+        bool[] visited = new bool[Customers.Count];
         int vehicleNumber = 0;
-        double vehicleTimeLimit = 0;
-        double returnTime = 0;
-        double arrivalTime = 0;
-        double windowExceed = 0;
+        double vehicleTime = 0;
 
+        // Każdy pojazd zaczyna z bazy
         InitialGTR.Add(Customers[0]);
-        foreach (var customer in Customers)
+
+        while (visited.Contains(false))
         {
-            if (customer.Id != 0)
+            Customer current = Customers[0]; // Start z bazy
+            visited[current.Id] = true;
+            vehicleTime = 0;
+
+            while (true)
             {
-                vehicleTimeLimit = Vehicles[vehicleNumber].wv;
-                returnTime = distanceMatrix[customer.Id, 0];
-                arrivalTime = Vehicles[vehicleNumber].time + distanceMatrix[customer.Id - 1, customer.Id];
-                windowExceed = new[] { customer.bv - arrivalTime, 0, arrivalTime - customer.dv + customer.ServiceTime }.Max();
-                if (arrivalTime + customer.ServiceTime + returnTime + customer.penalty * windowExceed <= vehicleTimeLimit)
+                Customer nextCustomer = null;
+                double minDistance = double.MaxValue;
+                double estimatedTime;
+                double returnTime;
+
+
+                // Szukaj najbliższego klienta, który spełnia warunki
+                foreach (var customer in Customers)
                 {
-                    InitialGTR.Add(customer);
-                    Vehicles[vehicleNumber].time = arrivalTime + customer.ServiceTime + customer.penalty * windowExceed;
+                    if (!visited[customer.Id] && customer.Id != 0)
+                    {
+                        double distance = distanceMatrix[current.Id, customer.Id];
+                        double distance2 = distance + customer.bv - vehicleTime; // dodaj czas oczekiwania na otwarcie okna czasowe
+                        estimatedTime = vehicleTime + distance + customer.ServiceTime;
+                        returnTime = estimatedTime + distanceMatrix[customer.Id, 0];
+
+                        if (estimatedTime <= customer.dv ) // Sprawdź czy zdąży przyjechać przed końcem okna czasowego
+                                                                                                     
+                        {
+                            if (distance2 < minDistance)
+                            {
+                                minDistance = distance2;
+                                nextCustomer = customer;
+                            }
+                        }
+                    }
                 }
-                else
+
+                // Jeśli nie ma dostępnych klientów, wróć do bazy
+                if (nextCustomer == null && current.Id != 0)
                 {
-                    InitialGTR.Add(Customers[0]);
+                    InitialGTR.Add(Customers[0]); // Powrót do bazy
                     vehicleNumber++;
-                    InitialGTR.Add(customer);
-                    Vehicles[vehicleNumber].time = Vehicles[vehicleNumber].time + distanceMatrix[0, customer.Id] + customer.ServiceTime + customer.penalty * windowExceed;
+                    if (vehicleNumber >= Vehicles.Count)
+                    {
+                        return;
+                    }
+                    break;
                 }
+                else if (nextCustomer == null && current.Id == 0) // Jeżeli ścieżka jest pusta i nie znaleziono klienta który spełnia wymagania
+                                                                  // np. nie da się zdążyć do końca okna czasowego
+                                                                  // dodaj pierwsze nieodwiedzone miasto
+                {
+                    foreach (var customer in Customers)
+                    {
+                        if (!visited[customer.Id])
+                        {
+                            nextCustomer = customer;
+                        }
+                    }
+                }
+
+                // Odwiedź wybranego klienta
+                vehicleTime += distanceMatrix[current.Id, nextCustomer.Id]; // Przesuń czas o czas podróży
+                if (vehicleTime < nextCustomer.bv) // Jeżeli pojazd dotrze przed czasem, przesuń czas do początku okna czasowego
+                    vehicleTime += nextCustomer.bv - vehicleTime;
+                vehicleTime += nextCustomer.ServiceTime; // Wykonaj serwis
+                InitialGTR.Add(nextCustomer); // Odznacz punkt
+                visited[nextCustomer.Id] = true;
+                current = nextCustomer;
             }
-
         }
-        InitialGTR.Add(Customers[0]);
 
+        // Zakończ trasę powrotem do bazy (jeśli ostatni pojazd jest w trasie)
+        if (InitialGTR[InitialGTR.Count - 1].Id != 0)
+        {
+            InitialGTR.Add(Customers[0]);
+        }
+    }
+
+    public string printGTRDistances(List<Customer> GTR)
+    {
+        string GTRString = "";
+        for (int i = 0; i < GTR.Count - 1; i++)
+        {
+            GTRString += distanceMatrix[GTR[i].Id, GTR[i + 1].Id].ToString() + "->";
+        }
+        return GTRString;
     }
 
     public string printGTR(List<Customer> GTR)
