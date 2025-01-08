@@ -209,12 +209,10 @@ public class VRPTW
                     if (!visited[customer.Id] && customer.Id != 0)
                     {
                         double distance = distanceMatrix[current.Id, customer.Id];
-                        double distance2 = distance + customer.bv - vehicleTime; // dodaj czas oczekiwania na otwarcie okna czasowe
+                        double distance2 = distance + customer.bv - vehicleTime; // dodaj czas oczekiwania na otwarcie okna czasowego
                         estimatedTime = vehicleTime + distance + customer.ServiceTime;
                         returnTime = estimatedTime + distanceMatrix[customer.Id, 0];
-
-                        if (estimatedTime <= customer.dv ) // Sprawdź czy zdąży przyjechać przed końcem okna czasowego
-                                                                                                     
+                        if (estimatedTime <= customer.dv ) // Sprawdź czy zdąży przyjechać przed końcem okna czasowego                                                                         
                         {
                             if (distance2 < minDistance)
                             {
