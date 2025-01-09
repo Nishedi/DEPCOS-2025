@@ -254,7 +254,7 @@ public class VRPTW
                 vehicleTime += penalty;
                 InitialGTR.Add(nextCustomer); // Odznacz punkt
                 visited[nextCustomer.Id] = true;
-                Console.WriteLine(nextCustomer.Id + " " + vehicleTime);
+                //Console.WriteLine(nextCustomer.Id + " " + vehicleTime);
                 current = nextCustomer;
             }
         }
@@ -272,7 +272,7 @@ public class VRPTW
         double vehicleTime = 0;
         Customer prevCustomer = null;
         int count = GTR.Count(customer => customer.Id == 0);
-        Console.WriteLine($"Liczba pojazów: {count-1}");
+        //Console.WriteLine($"Liczba pojazów: {count-1}");
         foreach (Customer customer in GTR) {
             if (customer.Id == 0)
             {
@@ -280,7 +280,7 @@ public class VRPTW
                 {
                     vehicleTime += distanceMatrix[prevCustomer.Id, GTR[0].Id];
                 }
-                Console.WriteLine(vehicleTime); // wyswietlenie kosztu dla trasy pojedynczych pojazdow
+                //Console.WriteLine(vehicleTime); // wyswietlenie kosztu dla trasy pojedynczych pojazdow
                 cost += vehicleTime;
                 vehicleTime = 0;
                 prevCustomer = customer;

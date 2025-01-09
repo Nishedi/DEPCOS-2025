@@ -8,9 +8,9 @@
         /*vrptw.Solve();*/
         vrptw.createInitialGTR();
         //Console.WriteLine(vrptw.printDistanceMatrix());
-
+        
         Console.WriteLine(vrptw.printGTR(vrptw.InitialGTR));
-        Console.WriteLine(vrptw.calculateCostGTR(vrptw.InitialGTR));
+        Console.WriteLine(vrptw.calculateCostGTRv2(vrptw.InitialGTR));
         vrptw.createGreedyGTR();
         //Console.WriteLine(vrptw.printDistanceMatrix());
 
