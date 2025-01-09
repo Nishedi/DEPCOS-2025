@@ -209,22 +209,28 @@ public class VRPTW
                     if (!visited[customer.Id] && customer.Id != 0)
                     {
                         double distance = distanceMatrix[current.Id, customer.Id];
-                        double distance2 = distance + customer.bv - vehicleTime; // dodaj czas oczekiwania na otwarcie okna czasowego
+                        double distance2 = distance ; // dodaj czas oczekiwania na otwarcie okna czasowego
                         estimatedTime = vehicleTime + distance + customer.ServiceTime;
                         returnTime = estimatedTime + distanceMatrix[customer.Id, 0];
-                        if (estimatedTime <= customer.dv ) // Sprawdź czy zdąży przyjechać przed końcem okna czasowego                                                                         
-                        {
-                            if (distance2 < minDistance)
+                        double distance3 = distance2;
+                        double timeLeftx = customer.dv - vehicleTime;
+                        double timeLeftx2 = customer.bv - vehicleTime;
+                        double penaltyx = Math.Max(0, customer.ServiceTime - timeLeftx);
+                        penaltyx += Math.Max(0, Math.Min(timeLeftx2, customer.ServiceTime));
+                        distance3 += penaltyx;
+                        /*if (estimatedTime <= customer.dv ) // Sprawdź czy zdąży przyjechać przed końcem okna czasowego                                                                         
+                        {*/
+                        if (distance3 < minDistance && distance3 + vehicleTime < Customers[0].dv)
                             {
-                                minDistance = distance2;
+                                minDistance = distance3;
                                 nextCustomer = customer;
                             }
-                        }
+                        /*}*/
                     }
                 }
 
                 // Jeśli nie ma dostępnych klientów, wróć do bazy
-                if (nextCustomer == null && current.Id != 0)
+                if (nextCustomer == null && current.Id != 0||vehicleTime>= Customers[0].dv)
                 {
                     InitialGTR.Add(Customers[0]); // Powrót do bazy
                     vehicleNumber++;
@@ -249,11 +255,21 @@ public class VRPTW
 
                 // Odwiedź wybranego klienta
                 vehicleTime += distanceMatrix[current.Id, nextCustomer.Id]; // Przesuń czas o czas podróży
-                if (vehicleTime < nextCustomer.bv) // Jeżeli pojazd dotrze przed czasem, przesuń czas do początku okna czasowego
-                    vehicleTime += nextCustomer.bv - vehicleTime;
+               /* if (vehicleTime < nextCustomer.bv) // Jeżeli pojazd dotrze przed czasem, przesuń czas do początku okna czasowego
+                    vehicleTime += nextCustomer.bv - vehicleTime;*/
+                /*if (Math.Max(0, vehicleTime - nextCustomer.dv) > 0 || Math.Max(0, nextCustomer.bv - vehicleTime) > 0)
+                {
+                    vehicleTime += nextCustomer.ServiceTime;
+                }*/
+                double timeLeft = nextCustomer.dv - vehicleTime;
+                double timeLeft2 = nextCustomer.bv - vehicleTime;
+                double penalty = Math.Max(0,nextCustomer.ServiceTime - timeLeft);
+                penalty += Math.Max(0,Math.Min(timeLeft2,nextCustomer.ServiceTime));
                 vehicleTime += nextCustomer.ServiceTime; // Wykonaj serwis
+                vehicleTime += penalty;
                 InitialGTR.Add(nextCustomer); // Odznacz punkt
                 visited[nextCustomer.Id] = true;
+                Console.WriteLine(nextCustomer.Id + " " + vehicleTime);
                 current = nextCustomer;
             }
         }
