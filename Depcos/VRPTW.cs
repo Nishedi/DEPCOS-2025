@@ -199,32 +199,29 @@ public class VRPTW
             {
                 Customer nextCustomer = null;
                 double minDistance = double.MaxValue;
-                double estimatedTime;
-                double returnTime;
-
 
                 // Szukaj najbliższego klienta, który spełnia warunki
                 foreach (var customer in Customers)
                 {
                     if (!visited[customer.Id] && customer.Id != 0)
                     {
-                        double distance = distanceMatrix[current.Id, customer.Id];
-                        double distance2 = distance + customer.bv - vehicleTime; // dodaj czas oczekiwania na otwarcie okna czasowego
-                        estimatedTime = vehicleTime + distance + customer.ServiceTime;
-                        returnTime = estimatedTime + distanceMatrix[customer.Id, 0];
-                        if (estimatedTime <= customer.dv ) // Sprawdź czy zdąży przyjechać przed końcem okna czasowego                                                                         
+                        double distance = distanceMatrix[current.Id, customer.Id]; // koszt przejazdu do punktu
+                        double estimatedUpperTimeLeft = customer.dv - vehicleTime; // koszt przekroczenia okna z gory
+                        double estimatedLowerTimeLeft = customer.bv - vehicleTime; // koszt przekroczenia okna z dolu
+                        double estimatedPenalty = Math.Max(0, customer.ServiceTime - estimatedUpperTimeLeft);
+                        estimatedPenalty += Math.Max(0, Math.Min(estimatedLowerTimeLeft, customer.ServiceTime));
+                        distance += estimatedPenalty;
+                        // Pomyslec o rozbudowaniu warunku krytycznego
+                        if (distance < minDistance && distance + vehicleTime < Customers[0].dv)
                         {
-                            if (distance2 < minDistance)
-                            {
-                                minDistance = distance2;
-                                nextCustomer = customer;
-                            }
+                            minDistance = distance;
+                            nextCustomer = customer;
                         }
                     }
                 }
 
                 // Jeśli nie ma dostępnych klientów, wróć do bazy
-                if (nextCustomer == null && current.Id != 0)
+                if (nextCustomer == null && current.Id != 0||vehicleTime>= Customers[0].dv)
                 {
                     InitialGTR.Add(Customers[0]); // Powrót do bazy
                     vehicleNumber++;
@@ -249,11 +246,15 @@ public class VRPTW
 
                 // Odwiedź wybranego klienta
                 vehicleTime += distanceMatrix[current.Id, nextCustomer.Id]; // Przesuń czas o czas podróży
-                if (vehicleTime < nextCustomer.bv) // Jeżeli pojazd dotrze przed czasem, przesuń czas do początku okna czasowego
-                    vehicleTime += nextCustomer.bv - vehicleTime;
+                double upperTimeLeft = nextCustomer.dv - vehicleTime; // dodaktowy koszt za przekroczenie od gory okna
+                double lowerTimeLeft = nextCustomer.bv - vehicleTime; // dodatkowy koszt za przekroczenie od dolu okna
+                double penalty = Math.Max(0,nextCustomer.ServiceTime - upperTimeLeft); // naliczenie potencjalnej kary
+                penalty += Math.Max(0,Math.Min(lowerTimeLeft,nextCustomer.ServiceTime));
                 vehicleTime += nextCustomer.ServiceTime; // Wykonaj serwis
+                vehicleTime += penalty;
                 InitialGTR.Add(nextCustomer); // Odznacz punkt
                 visited[nextCustomer.Id] = true;
+                //Console.WriteLine(nextCustomer.Id + " " + vehicleTime);
                 current = nextCustomer;
             }
         }
@@ -263,6 +264,40 @@ public class VRPTW
         {
             InitialGTR.Add(Customers[0]);
         }
+    }
+
+    public double calculateCostGTRv2(List<Customer> GTR)
+    {
+        double cost = 0;
+        double vehicleTime = 0;
+        Customer prevCustomer = null;
+        int count = GTR.Count(customer => customer.Id == 0);
+        //Console.WriteLine($"Liczba pojazów: {count-1}");
+        foreach (Customer customer in GTR) {
+            if (customer.Id == 0)
+            {
+                if(prevCustomer!= null)
+                {
+                    vehicleTime += distanceMatrix[prevCustomer.Id, GTR[0].Id];
+                }
+                //Console.WriteLine(vehicleTime); // wyswietlenie kosztu dla trasy pojedynczych pojazdow
+                cost += vehicleTime;
+                vehicleTime = 0;
+                prevCustomer = customer;
+            }
+            else
+            {
+                vehicleTime += distanceMatrix[prevCustomer.Id, customer.Id];
+                double upperTimeLeft = customer.dv - vehicleTime; // dodaktowy koszt za przekroczenie od gory okna
+                double lowerTimeLeft = customer.bv - vehicleTime; // dodatkowy koszt za przekroczenie od dolu okna
+                double penalty = Math.Max(0, customer.ServiceTime - upperTimeLeft); // naliczenie potencjalnej kary
+                penalty += Math.Max(0, Math.Min(lowerTimeLeft, customer.ServiceTime));
+                vehicleTime += customer.ServiceTime; // Wykonaj serwis
+                vehicleTime += penalty;
+                prevCustomer= customer;
+            }
+        }
+        return cost;
     }
 
     public string printGTRDistances(List<Customer> GTR)
