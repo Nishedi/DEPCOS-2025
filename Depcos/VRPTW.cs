@@ -14,6 +14,8 @@ public class VRPTW
     public int NumberOfVehicles { get; private set; }
     public double[,] distanceMatrix { get; private set; }
 
+    public List<double> vehicleStarts { get; private set; }
+
     public VRPTW(string filePath, int vehicleNumber)
     {
         Customers = new List<Customer>();
@@ -182,6 +184,7 @@ public class VRPTW
     public void createGreedyGTR()
     {
         InitialGTR = new List<Customer>();
+        vehicleStarts = new List<double>();
         bool[] visited = new bool[Customers.Count];
         int vehicleNumber = 0;
         double vehicleTime = 0;
@@ -244,8 +247,13 @@ public class VRPTW
                     }
                 }
 
-                // Odwiedź wybranego klienta
+                if(current.Id == 0)
+                {
+                    vehicleTime = Math.Max(nextCustomer.bv - distanceMatrix[current.Id, nextCustomer.Id], 0);
+                    vehicleStarts.Add(Math.Max(nextCustomer.bv - distanceMatrix[current.Id, nextCustomer.Id], 0.0));
+                }
                 vehicleTime += distanceMatrix[current.Id, nextCustomer.Id]; // Przesuń czas o czas podróży
+                // Odwiedź wybranego klienta
                 double upperTimeLeft = nextCustomer.dv - vehicleTime; // dodaktowy koszt za przekroczenie od gory okna
                 double lowerTimeLeft = nextCustomer.bv - vehicleTime; // dodatkowy koszt za przekroczenie od dolu okna
                 double penalty = Math.Max(0,nextCustomer.ServiceTime - upperTimeLeft); // naliczenie potencjalnej kary
@@ -266,23 +274,29 @@ public class VRPTW
         }
     }
 
-    public double calculateCostGTRv2(List<Customer> GTR)
+    public double calculateCostGTRv2(List<Customer> GTR, List<Double> vehicleStartTimes)
     {
         double cost = 0;
         double vehicleTime = 0;
         Customer prevCustomer = null;
         int count = GTR.Count(customer => customer.Id == 0);
-        //Console.WriteLine($"Liczba pojazów: {count-1}");
+        int vehicleId = 0;
         foreach (Customer customer in GTR) {
             if (customer.Id == 0)
             {
                 if(prevCustomer!= null)
                 {
                     vehicleTime += distanceMatrix[prevCustomer.Id, GTR[0].Id];
+                    cost += vehicleTime - vehicleStartTimes[vehicleId];
+                    Console.WriteLine(vehicleTime - vehicleStartTimes[vehicleId]);
+                    vehicleId++;
                 }
                 //Console.WriteLine(vehicleTime); // wyswietlenie kosztu dla trasy pojedynczych pojazdow
-                cost += vehicleTime;
-                vehicleTime = 0;
+                
+                
+                
+                if(vehicleId < vehicleStartTimes.Count)
+                    vehicleTime = vehicleStartTimes[vehicleId];
                 prevCustomer = customer;
             }
             else

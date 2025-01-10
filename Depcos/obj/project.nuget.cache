@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "+Lx0XxoWMSjVDVTxD0ndyib7Kr5XXJ1OxpW0EB9ikEpJLSM/OWW2B1zhzxiXwFZlyPREy2MgzurazCu9B6Osew==",
+  "dgSpecHash": "IFyA+ieoVqc/QIyoWUqq5eJTVF3i29claRMU0DL6rTf/bTH617iRC/Iw0WIGMUhQpSG0vS3ZnUZF8SEVgzhfEg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\minec\\Desktop\\DEPCOS-2025-temp-name-\\Depcos\\Depcos.csproj",
+  "projectFilePath": "C:\\Users\\KONRAD PEMPERA\\Desktop\\Depcos\\Depcos\\Depcos.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\minec\\.nuget\\packages\\gurobi.optimizer\\12.0.0\\gurobi.optimizer.12.0.0.nupkg.sha512"
+    "C:\\Users\\KONRAD PEMPERA\\.nuget\\packages\\gurobi.optimizer\\12.0.0\\gurobi.optimizer.12.0.0.nupkg.sha512"
   ],
   "logs": []
 }

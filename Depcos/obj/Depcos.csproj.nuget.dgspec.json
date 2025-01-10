@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\minec\\Desktop\\DEPCOS-2025-temp-name-\\Depcos\\Depcos.csproj": {}
+    "C:\\Users\\KONRAD PEMPERA\\Desktop\\Depcos\\Depcos\\Depcos.csproj": {}
   },
   "projects": {
-    "C:\\Users\\minec\\Desktop\\DEPCOS-2025-temp-name-\\Depcos\\Depcos.csproj": {
+    "C:\\Users\\KONRAD PEMPERA\\Desktop\\Depcos\\Depcos\\Depcos.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\minec\\Desktop\\DEPCOS-2025-temp-name-\\Depcos\\Depcos.csproj",
+        "projectUniqueName": "C:\\Users\\KONRAD PEMPERA\\Desktop\\Depcos\\Depcos\\Depcos.csproj",
         "projectName": "Depcos",
-        "projectPath": "C:\\Users\\minec\\Desktop\\DEPCOS-2025-temp-name-\\Depcos\\Depcos.csproj",
-        "packagesPath": "C:\\Users\\minec\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\minec\\Desktop\\DEPCOS-2025-temp-name-\\Depcos\\obj\\",
+        "projectPath": "C:\\Users\\KONRAD PEMPERA\\Desktop\\Depcos\\Depcos\\Depcos.csproj",
+        "packagesPath": "C:\\Users\\KONRAD PEMPERA\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\KONRAD PEMPERA\\Desktop\\Depcos\\Depcos\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\minec\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\KONRAD PEMPERA\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -55,8 +51,7 @@
             "net47",
             "net471",
             "net472",
-            "net48",
-            "net481"
+            "net48"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -65,7 +60,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.302\\RuntimeIdentifierGraph.json"
         }
       }
     }
