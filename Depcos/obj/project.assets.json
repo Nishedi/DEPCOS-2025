@@ -5,10 +5,14 @@
       "Gurobi.Optimizer/12.0.0": {
         "type": "package",
         "compile": {
-          "lib/netstandard2.0/gurobi120.netstandard20.dll": {}
+          "lib/netstandard2.0/gurobi120.netstandard20.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/gurobi120.netstandard20.dll": {}
+          "lib/netstandard2.0/gurobi120.netstandard20.dll": {
+            "related": ".xml"
+          }
         },
         "build": {
           "build/Gurobi.Optimizer.targets": {}
@@ -77,19 +81,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\KONRAD PEMPERA\\.nuget\\packages\\": {}
+    "C:\\Users\\minec\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\KONRAD PEMPERA\\Desktop\\Depcos\\Depcos\\Depcos.csproj",
+      "projectUniqueName": "C:\\Users\\minec\\Desktop\\DEPCOS-2025-temp-name-\\Depcos\\Depcos.csproj",
       "projectName": "Depcos",
-      "projectPath": "C:\\Users\\KONRAD PEMPERA\\Desktop\\Depcos\\Depcos\\Depcos.csproj",
-      "packagesPath": "C:\\Users\\KONRAD PEMPERA\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\KONRAD PEMPERA\\Desktop\\Depcos\\Depcos\\obj\\",
+      "projectPath": "C:\\Users\\minec\\Desktop\\DEPCOS-2025-temp-name-\\Depcos\\Depcos.csproj",
+      "packagesPath": "C:\\Users\\minec\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\minec\\Desktop\\DEPCOS-2025-temp-name-\\Depcos\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\KONRAD PEMPERA\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\minec\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -126,7 +135,8 @@
           "net47",
           "net471",
           "net472",
-          "net48"
+          "net48",
+          "net481"
         ],
         "assetTargetFallback": true,
         "warn": true,
@@ -135,7 +145,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.302\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }
