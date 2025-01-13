@@ -14,7 +14,6 @@ C:\Users\KONRAD PEMPERA\Desktop\Depcos\Depcos\obj\Debug\net6.0\Depcos.pdb
 C:\Users\KONRAD PEMPERA\Desktop\Depcos\Depcos\obj\Debug\net6.0\Depcos.genruntimeconfig.cache
 C:\Users\KONRAD PEMPERA\Desktop\Depcos\Depcos\obj\Debug\net6.0\ref\Depcos.dll
 C:\Users\KONRAD PEMPERA\Desktop\Depcos\Depcos\bin\Debug\net6.0\gurobi120.netstandard20.dll
-C:\Users\KONRAD PEMPERA\Desktop\Depcos\Depcos\bin\Debug\net6.0\gurobi120.netstandard20.xml
 C:\Users\KONRAD PEMPERA\Desktop\Depcos\Depcos\obj\Debug\net6.0\Depcos.csproj.CopyComplete
 C:\Users\MichałJaroszczuk\Source\Repos\DEPCOS-2025-temp-name-\Depcos\obj\Debug\net6.0\Depcos.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\MichałJaroszczuk\Source\Repos\DEPCOS-2025-temp-name-\Depcos\obj\Debug\net6.0\Depcos.AssemblyInfoInputs.cache
@@ -61,3 +60,8 @@ C:\Users\minec\Desktop\DEPCOS-2025-temp-name-\Depcos\obj\Debug\net6.0\refint\Dep
 C:\Users\minec\Desktop\DEPCOS-2025-temp-name-\Depcos\obj\Debug\net6.0\Depcos.pdb
 C:\Users\minec\Desktop\DEPCOS-2025-temp-name-\Depcos\obj\Debug\net6.0\Depcos.genruntimeconfig.cache
 C:\Users\minec\Desktop\DEPCOS-2025-temp-name-\Depcos\obj\Debug\net6.0\ref\Depcos.dll
+C:\Users\KONRAD PEMPERA\Desktop\Depcos\Depcos\bin\Debug\net6.0\runtimes\linux-arm64\native\libgurobi120.so
+C:\Users\KONRAD PEMPERA\Desktop\Depcos\Depcos\bin\Debug\net6.0\runtimes\linux-x64\native\libgurobi120.so
+C:\Users\KONRAD PEMPERA\Desktop\Depcos\Depcos\bin\Debug\net6.0\runtimes\osx-arm64\native\libgurobi120.dylib
+C:\Users\KONRAD PEMPERA\Desktop\Depcos\Depcos\bin\Debug\net6.0\runtimes\osx-x64\native\libgurobi120.dylib
+C:\Users\KONRAD PEMPERA\Desktop\Depcos\Depcos\bin\Debug\net6.0\runtimes\win-x64\native\gurobi120.dll

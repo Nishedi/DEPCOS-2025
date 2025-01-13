@@ -5,18 +5,16 @@
         string filePath = "C101.txt";
         //string filePath = "CTEST.txt";
         VRPTW vrptw = new VRPTW(filePath, 101);
-        /*vrptw.Solve();*/
-        vrptw.createInitialGTR();
-        //Console.WriteLine(vrptw.printDistanceMatrix());
-        
-        Console.WriteLine(vrptw.printGTR(vrptw.InitialGTR));
-        Console.WriteLine(vrptw.calculateCostGTRv2(vrptw.InitialGTR));
-        vrptw.createGreedyGTR();
-        //Console.WriteLine(vrptw.printDistanceMatrix());
+ 
 
-        Console.WriteLine(vrptw.printGTR(vrptw.InitialGTR));
-        //Console.WriteLine(vrptw.printGTRDistances(vrptw.InitialGTR));
-        Console.WriteLine(vrptw.calculateCostGTRv2(vrptw.InitialGTR));
-        //Console.WriteLine(vrptw.calculateCostGTR(vrptw.InitialGTR));
+        TS tabuSearch = new TS();
+        Result rs = tabuSearch.TabuSearch(vrptw.distanceMatrix, vrptw.Customers, vrptw.Vehicles, 100, 20, 1);
+        GeneralMethods gm = new GeneralMethods();
+        Console.WriteLine(gm.calculateCostGTRv2(vrptw.distanceMatrix, rs.GTR, rs.VehicleStartTimes));
+        /*rs = tabuSearch.TabuSearch(vrptw.distanceMatrix, vrptw.Customers, vrptw.Vehicles, 100, 20, 2);
+        Console.WriteLine(gm.calculateCostGTRv2(vrptw.distanceMatrix, rs.GTR, rs.VehicleStartTimes));
+        rs = tabuSearch.TabuSearch(vrptw.distanceMatrix, vrptw.Customers, vrptw.Vehicles, 100, 20, 3);
+        Console.WriteLine(gm.calculateCostGTRv2(vrptw.distanceMatrix, rs.GTR, rs.VehicleStartTimes));*/
+        Console.WriteLine(vrptw.printGTR(rs.GTR));
     }
 }
