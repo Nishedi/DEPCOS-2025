@@ -171,6 +171,7 @@ public class TS
             {
                 if (!tabuList.Contains(neighbor) || gm.calculateCostGTRv2(distances, neighbor.Path, neighbor.VehicleStarts) < bestSolutionLength)
                 {
+                    
                     currentSolution = neighbor.Path;
                     vehicleStarts = neighbor.VehicleStarts;
                     tabuList.Add(neighbor);
@@ -182,16 +183,39 @@ public class TS
                 }
             }
 
-            currentSolutionLength = gm.calculateCostGTRv2(distances, currentSolution, vehicleStarts);
-
-            if (currentSolutionLength < bestSolutionLength)
+            List<double> vehicleStartsTry = new List<double>();
+            foreach(double d in vehicleStarts){
+                vehicleStartsTry.Add(d);
+            }
+            bool x = false;
+            for(int i = 0; i < vehicleStarts.Count; i++)
             {
-                bestSolution = currentSolution;
-                bestSolutionLength = currentSolutionLength;
-                bestVehicleStarts = vehicleStarts;
+                double bestValue = 0;
+                for (int j = 0; j < 20; j++)
+                {
+                    double value = vehicleStarts[i];
+                    double diffrence = value/10;
+                    if (value < 10) diffrence = 1;
+                    vehicleStartsTry[i] = diffrence * j;
+                    
+                    currentSolutionLength = gm.calculateCostGTRv2(distances, currentSolution, vehicleStartsTry);
+
+                    if (currentSolutionLength < bestSolutionLength)
+                    {
+                        bestSolution = currentSolution;
+                        bestSolutionLength = currentSolutionLength;
+                        bestVehicleStarts.Clear();
+                        foreach (double d in vehicleStartsTry)
+                        {
+                            bestVehicleStarts.Add(d);
+                        }
+                        bestValue = diffrence * j;
+                    }
+                }
+                vehicleStartsTry[i] = bestValue;
             }
         }
-        return new Result(bestSolution, vehicleStarts);
+        return new Result(bestSolution, bestVehicleStarts);
     }
 }
 
@@ -214,8 +238,7 @@ public class Neighbor
     {
         return obj is Neighbor neighbor &&
                I == neighbor.I &&
-               J == neighbor.J &&
-               Path.SequenceEqual(neighbor.Path);
+               J == neighbor.J ;
     }
 
     public override int GetHashCode()
