@@ -144,7 +144,7 @@ public class TS
         List<double> bestVehicleStarts = new List<double>();
         currentSolution = gm.createGreedyGTR(distances, customers, vehicleStarts, vehicles);
         double currentSolutionLength = gm.calculateCostGTRv2(distances, currentSolution, vehicleStarts);
-
+        Console.WriteLine(currentSolutionLength);
         if (bestSolution == null || currentSolutionLength < bestSolutionLength)
         {
             bestSolution = currentSolution;
@@ -187,7 +187,6 @@ public class TS
             foreach(double d in vehicleStarts){
                 vehicleStartsTry.Add(d);
             }
-            bool x = false;
             for(int i = 0; i < vehicleStarts.Count; i++)
             {
                 double bestValue = 0;
