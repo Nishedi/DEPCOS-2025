@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Depcos")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+95545f23f910d0f988fbad8ea31e3b87533b9882")]
 [assembly: System.Reflection.AssemblyProductAttribute("Depcos")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Depcos")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
