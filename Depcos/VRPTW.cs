@@ -12,12 +12,14 @@ public class VRPTW
     public List<Customer> InitialGTR { get; private set; }
     public int VehicleCapacity { get; private set; }
     public int NumberOfVehicles { get; private set; }
+
     public double[,] distanceMatrix { get; private set; }
 
     public List<double> vehicleStarts { get; private set; }
 
     public VRPTW(string filePath, int vehicleNumber)
     {
+        NumberOfVehicles = vehicleNumber;
         Customers = new List<Customer>();
         Vehicles = new List<Vehicle>();
         ParseSolomonFile(filePath);

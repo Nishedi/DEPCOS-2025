@@ -7,25 +7,78 @@ using System.Text;
 using System.Threading.Tasks;
 
 public class GurobiVRP
+
+
 {
+    public List<List<int>> subSets = new List<List<int>>();
     private static GRBEnv env = new GRBEnv();
 
-    public void gurobi_test()
+    // Function that generates all possible combinations of customers
+    public void GetCombination(List<Customer> customers)
     {
-        // Create a new model
-        int size = 5;
-        GRBModel model = new GRBModel(env);
-        GRBVar[, , ] x = new GRBVar[size, size, size]; // Tu zmienić na ilości lokacji i pojazdow
-
-        // Create variables
-        for(int v = 0; v < size; v++)
+        List<int> list = new List<int>();
+        foreach (var loc in customers)
         {
-            for(int i = 0; i < size; i++)
+            if (loc.Id != 0)
+                list.Add(loc.Id);
+        }
+        double count = Math.Pow(2, list.Count);
+        for (int i = 1; i <= count - 1; i++)
+        {
+            string str = Convert.ToString(i, 2).PadLeft(list.Count, '0');
+            List<int> subSet = new List<int>();
+            for (int j = 0; j < str.Length; j++)
             {
-                for (int j = 0; j < size; j++)
+                if (str[j] == '1')
+                {
+                    subSet.Add(list[j]);
+                }
+            }
+            if (subSet.Count > 1)
+                subSets.Add(subSet);
+        }
+    }
+
+    public void printSubSets()
+    {
+        foreach (var subSet in subSets)
+        {
+            foreach (var item in subSet)
+            {
+                Console.Write(item + " ");
+            }
+            Console.WriteLine();
+        }
+    }
+    public double gurobi_test(VRPTW problem)
+    {
+        // Generate all possible combinations
+        GetCombination(problem.Customers);
+        // Create a new model
+        GRBModel model = new GRBModel(env);
+        int locationsNumber = problem.Customers.Count;
+        GRBVar[, ,] x = new GRBVar[problem.NumberOfVehicles, locationsNumber, locationsNumber];
+        GRBVar[,] y = new GRBVar[problem.NumberOfVehicles, locationsNumber];
+
+        // Create variable x[v, i, j]
+        for (int v = 0; v < problem.NumberOfVehicles; v++)
+        {
+            for(int i = 0; i < locationsNumber; i++)
+            {
+                for (int j = 0; j < locationsNumber; j++)
                 {
                     x[v, i, j] = model.AddVar(0.0, 1.0, 0.0, GRB.BINARY, "x_" + v + "_" + i + "_" + j);
                 }
+            }
+        }
+
+        // Create variable y[v, i]
+        for (int v = 0; v < problem.NumberOfVehicles; v++)
+        {
+            for (int i = 0; i < locationsNumber; i++)
+            {
+                y[v, i] = model.AddVar(0.0, 1.0, 0.0, GRB.BINARY, "y_" + v + "_" + i);
+
             }
         }
 
@@ -33,40 +86,122 @@ public class GurobiVRP
 
         // Set objective
         GRBLinExpr expr = 0.0;
-        for (int v = 0; v < size; v++)
+        for (int v = 0; v < problem.NumberOfVehicles; v++)
         {
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < locationsNumber; i++)
             {
-                for (int j = 0; j < size; j++)
+                for (int j = 0; j < locationsNumber; j++)
                 {
-                    expr += x[v, i, j] * j;
+                    expr += x[v, i, j] * problem.distanceMatrix[i,j];
                 }
             }
         }
         model.SetObjective(expr, GRB.MINIMIZE);
 
-        // Add constraint
-        
-        for (int v = 0; v < size; v++)
+        // Add constraint 3 -> Seems to be ok
+        // A location must be assigned to exactly one vehicle
+        for (int i = 1; i < locationsNumber; i++)
         {
             GRBLinExpr sum = 0.0;
-            for (int i = 0; i < size; i++)
-            {
-                for (int j = 0; j < size; j++)
+            for (int v = 0; v < problem.NumberOfVehicles; v++)
                 {
-                    sum += x[v, i, j];
-                }
+                sum += y[v, i];
             }
-            //Console.WriteLine(int(sum));
-            model.AddConstr(sum, GRB.GREATER_EQUAL, 5.0, "c0");
+            model.AddConstr(sum, GRB.EQUAL, 1.0, "c3");
         }
-   
+
+        // Add constraint 4
+        // Setting x variables depending on y variables
+        for (int v = 0; v < problem.NumberOfVehicles; v++)
+        {
+            for (int i = 0; i < locationsNumber; i++)
+            {
+                GRBLinExpr sum = 0.0;
+                for (int j = 0; j < locationsNumber; j++)
+                {
+                    sum += x[v, j, i];
+                }
+                model.AddConstr(y[v,i], GRB.LESS_EQUAL, sum, "c4");
+            }
+        }
+
+        // Add constraint 5
+        // Vehicle must start from depot
+        for (int v = 0; v < problem.NumberOfVehicles; v++)
+        {
+            for (int i = 0; i < locationsNumber; i++)
+            {
+                GRBLinExpr sum = 0.0;
+                for (int j = 0; j < locationsNumber; j++)
+                {
+                    sum += x[v, 0, j];
+                }
+                model.AddConstr(y[v, i], GRB.LESS_EQUAL, sum, "c5");
+            }
+
+        }
+
+
+        // Add constraint 6
+        // A vehicle must not go to the same location
+        for (int v = 0; v < problem.NumberOfVehicles; v++)
+        {
+            GRBLinExpr sum = 0.0;
+            for (int i = 0; i < locationsNumber; i++)
+            {
+                sum += x[v, i, i];
+            }
+                model.AddConstr(sum, GRB.EQUAL, 0.0, "c6");
+        }
+
+        // Add constraint 7
+        // A vehicle must enter and leave a location
+        for (int v = 0; v < problem.NumberOfVehicles; v++)
+        {
+            for (int i = 0; i < locationsNumber; i++)
+            {
+                GRBLinExpr sumEnter = 0.0;
+                GRBLinExpr sumLeave = 0.0;
+                for (int j = 0; j < locationsNumber; j++)
+                {
+                    sumEnter += x[v, i, j];
+                    sumLeave += x[v, j, i];
+                }
+                model.AddConstr(sumEnter, GRB.EQUAL, sumLeave, "c7");
+            }
+        }
+
+        // Add constraint 8
+        // No subtour constraint
+        for (int v = 0; v < problem.NumberOfVehicles; v++)
+        {
+            foreach (var subSet in subSets)
+            {
+                GRBLinExpr sum = 0.0;
+                foreach (var i in subSet)
+                {
+                    foreach (var j in subSet)
+                    {
+                        if (i != j)
+                            sum += x[v, i, j];
+                    }
+                }
+                model.AddConstr(sum, GRB.LESS_EQUAL, subSet.Count - 1, "c8");
+            }
+        }
 
         // Optimize model
         model.Optimize();
-        model.Write("model.lp");
-        // Dispose of model and environment
+        // Print model variables
+        GRBVar[] vars = model.GetVars();
+        foreach (var v in vars)
+            Console.WriteLine(v.VarName + " = " + v.X);
+        double fCelu = model.ObjVal;
+        //model.Write("model.lp");
+
+        // Dispose (Clean) of model and environment
         model.Dispose();
         env.Dispose();
+        return fCelu;
     }   
 }
