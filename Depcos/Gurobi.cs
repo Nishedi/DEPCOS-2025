@@ -59,6 +59,7 @@ public class GurobiVRP
         int locationsNumber = problem.Customers.Count;
         GRBVar[, ,] x = new GRBVar[problem.NumberOfVehicles, locationsNumber, locationsNumber];
         GRBVar[,] y = new GRBVar[problem.NumberOfVehicles, locationsNumber];
+        GRBVar[,] t = new GRBVar[problem.NumberOfVehicles, locationsNumber];
 
         // Create variable x[v, i, j]
         for (int v = 0; v < problem.NumberOfVehicles; v++)
@@ -82,6 +83,16 @@ public class GurobiVRP
             }
         }
 
+        // Create variable t[v, i]
+        for (int v = 0; v < problem.NumberOfVehicles; v++)
+        {
+            for (int i = 0; i < locationsNumber; i++)
+            {
+                t[v, i] = model.AddVar(0.0, 1000.0, 0.0, GRB.INTEGER, "t_" + v + "_" + i);
+
+            }
+        }
+
         model.Update();
 
         // Set objective
@@ -95,10 +106,37 @@ public class GurobiVRP
                     expr += x[v, i, j] * problem.distanceMatrix[i,j];
                 }
             }
+            //Add service time
+            for (int i = 0; i < locationsNumber; i++)
+            {
+                expr += y[v, i] * problem.Customers[i].ServiceTime;
+            }
         }
         model.SetObjective(expr, GRB.MINIMIZE);
 
-        // Add constraint 3 -> Seems to be ok
+        // Add constraint 2
+        // Time constraint
+        for (int v = 0; v < problem.NumberOfVehicles; v++)
+        {
+            GRBLinExpr sum = 0.0;
+            // Add travelling time
+            for (int i = 0; i < locationsNumber; i++)
+            {
+                for (int j = 0; j < locationsNumber; j++)
+                {
+                    sum += x[v, i, j] * problem.distanceMatrix[i, j];
+                }
+            }
+            //Add service time
+            for (int i = 0; i < locationsNumber; i++)
+            {
+                sum += y[v, i] * problem.Customers[i].ServiceTime;
+            }  
+            // Checking if the time is less than the vehicle working time. Vehicle 0 is take, because fleet is homogeneous
+            model.AddConstr(sum, GRB.LESS_EQUAL, problem.Vehicles[0].wv, "c2");
+        }
+
+        // Add constraint 3 
         // A location must be assigned to exactly one vehicle
         for (int i = 1; i < locationsNumber; i++)
         {
@@ -189,6 +227,22 @@ public class GurobiVRP
                 model.AddConstr(sum, GRB.LESS_EQUAL, subSet.Count - 1, "c8");
             }
         }
+
+        // Add constraint 9
+        // Set time variables
+        /*
+        for (int v = 0; v < problem.NumberOfVehicles; v++)
+        {
+            for (int i = 0; i < locationsNumber; i++)
+            {
+                for(int j = 0; j < locationsNumber; j++)
+                {
+                    GRBLinExpr sum = (t[v, i] + problem.distanceMatrix[i, j] + problem.Customers[j].ServiceTime);
+                    model.AddConstr(t[v, j], GRB.EQUAL, sum, "c9");
+                }
+            }
+        }
+        */
 
         // Optimize model
         model.Optimize();
