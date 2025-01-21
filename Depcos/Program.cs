@@ -13,7 +13,7 @@ public class Program
         Result rs = null;
 
 
-        vrptw = new VRPTW(filePath, 5);
+        vrptw = new VRPTW(filePath, 10);
         //rs = tabuSearch.TabuSearch(vrptw.distanceMatrix, vrptw.Customers, vrptw.Vehicles, 100, 120, 1);
         //GeneralMethods gm = new GeneralMethods();
         //Console.WriteLine(gm.calculateCostGTRv2(vrptw.distanceMatrix, rs.GTR, rs.VehicleStartTimes));

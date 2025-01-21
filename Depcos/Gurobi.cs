@@ -88,7 +88,7 @@ public class GurobiVRP
         {
             for (int i = 0; i < locationsNumber; i++)
             {
-                t[v, i] = model.AddVar(0.0, 1000.0, 0.0, GRB.INTEGER, "t_" + v + "_" + i);
+                t[v, i] = model.AddVar(0.0, 10000.0, 0.0, GRB.INTEGER, "t_" + v + "_" + i);
 
             }
         }
@@ -230,19 +230,38 @@ public class GurobiVRP
 
         // Add constraint 9
         // Set time variables
-        /*
         for (int v = 0; v < problem.NumberOfVehicles; v++)
         {
             for (int i = 0; i < locationsNumber; i++)
             {
-                for(int j = 0; j < locationsNumber; j++)
+                for(int j = 1; j < locationsNumber; j++)
                 {
-                    GRBLinExpr sum = (t[v, i] + problem.distanceMatrix[i, j] + problem.Customers[j].ServiceTime);
-                    model.AddConstr(t[v, j], GRB.EQUAL, sum, "c9");
+                    GRBLinExpr sum = t[v, i] + problem.distanceMatrix[i, j] + problem.Customers[i].ServiceTime - 10000*(1 - x[v, i, j]);
+                    model.AddConstr(sum, GRB.LESS_EQUAL, t[v, j], "c9");
                 }
             }
         }
-        */
+
+
+        // Add constraint 10 and 11
+        // Set time variables range
+       
+        for (int v = 0; v < problem.NumberOfVehicles; v++)
+        {
+            for (int i = 0; i < locationsNumber; i++)
+            {
+                model.AddConstr(t[v, i], GRB.GREATER_EQUAL, 0.0, "c10");
+            }
+        }
+
+        for (int v = 0; v < problem.NumberOfVehicles; v++)
+        {
+            for (int i = 0; i < locationsNumber; i++)
+            {
+                model.AddConstr(t[v, i], GRB.LESS_EQUAL, problem.Customers[0].dv, "c11");
+            }
+        }
+
 
         // Optimize model
         model.Optimize();
