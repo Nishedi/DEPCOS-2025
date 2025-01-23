@@ -6,7 +6,7 @@ using System.Diagnostics;
 public class Genetic
 {
     private int distancesSize;
-    private int populationSize = 10000;
+    private int populationSize = 1000;
     private GeneralMethods gm = new GeneralMethods();
     Random generator = new Random();
 
@@ -22,16 +22,17 @@ public class Genetic
 
         for (int i = distancesSize; i < this.populationSize; i++)
         {
-            vehicleStarts = new List<double>();
             GTR = gm.createGreedyGTRMutated(distancesMatrix, customers, vehicleStarts, vehicles);
-            population.Add(new Result(GTR, vehicleStarts));
+            var x = new Result(GTR, vehicleStarts);
+            x.generateGreedyTimes(distancesMatrix);
+            population.Add(x);
         }
         return population;
     }
 
     private Result SelectParent(double[,] distancesMatrix, List<Result> population)
     {
-        int tournamentSize = population[0].GTR.Count / 2; // pierwotnie 2
+        int tournamentSize = population[0].GTR.Count / 10; // pierwotnie 2
         var tournament = new List<Result>();
 
         for (int i = 0; i < tournamentSize; i++)
@@ -57,6 +58,83 @@ public class Genetic
         return tournament[bestTourIndex];
     }
 
+    public List<Customer> Swap(List<Customer> child)
+    {
+        int i = generator.Next(child.Count-2)+1;
+        int j = generator.Next(child.Count-2)+1;
+        if(i==j) j = generator.Next(child.Count-2)+1;
+        var customer = child[i];
+        child[i] = child[j];
+        child[j] = customer;
+        return child;
+    }
+
+    public List<Customer> Crossover(List<Customer> parent1, List<Customer> parent2)
+    {
+        var childClients = new List<Customer>();
+        for (int x = 0; x < parent1.Count; x++)
+        {
+            childClients.Add(null);
+        }
+        int i = generator.Next(parent1.Count);
+        int j = generator.Next(parent2.Count);
+        while (j == i)
+        {
+            j = generator.Next(parent1.Count);
+        }
+        if (i > j)
+        {
+            int swap = i;
+            i = j;
+            j = swap;
+        }
+
+        for (; i <= j; i++)
+        {
+            childClients[i] = parent1[i];
+        }
+        int currentIndex = 1;
+        childClients[0] = parent1[0];
+        childClients[childClients.Count-1] = parent1[parent1.Count-1];
+
+        for( i = 1; i < parent1.Count-1; i++)
+        {
+            if (parent1[i].Id == 0)
+            {
+                childClients[i] = parent1[i];
+            }
+        }
+
+        foreach (var element in parent2)
+        {
+            if (!childClients.Contains(element))
+            {
+                while (childClients[currentIndex] != null)
+                {
+                    currentIndex++;
+                }
+                childClients[currentIndex] = element;
+            }
+        }
+        for (int x = 0; x < childClients.Count; x++)
+        {
+            if (childClients[x] == null)
+            {
+                childClients[x] = parent1[0];
+                i = generator.Next(childClients.Count);
+                while (childClients[i] == null)
+                {
+                    i = generator.Next(childClients.Count);
+                }
+                Customer swap = childClients[i];
+                childClients[i] = childClients[x];
+                childClients[x] = swap;
+
+            }
+        }
+        return childClients;
+    }
+
     public Result GeneticSolve(double[,] distances, List<Customer> customers, List<Vehicle> vehicles, int maxTime)
     {
         maxTime *= 1000;
@@ -68,8 +146,6 @@ public class Genetic
 
         Stopwatch stopwatch = Stopwatch.StartNew();
         var population = InitializePopulation(distances, customers, vehicles);
-
-
         while (stopwatch.ElapsedMilliseconds <= maxTime)
         {
             var newPopulation = new List<Result>(populationSize);
@@ -78,32 +154,25 @@ public class Genetic
             {
                 var first = SelectParent(distances, population);
                 var second = SelectParent(distances, population);
-
-                /*int iter = 0;
-                while (iter++ < 100 && first.SequenceEqual(second))
+                bool isSame = true;
+                for(int x = 0; x < first.GTR.Count; x++)
                 {
-                    second = SelectParent(population);
-                }
-
-                List<int> child;
-                if (first.SequenceEqual(second))
-                {
-                    child = cs.PMXCrossOver(first, second, distancesSize, 0);
-                }
-                else
-                {
-                    child = crossoverType switch
+                    if (first.GTR[x] != second.GTR[x])
                     {
-                        0 => cs.PMXCrossOver(first, second, distancesSize, crossoverRate),
-                        1 => cs.OrderCrossover(first, second, distancesSize, crossoverRate),
-                        _ => throw new ArgumentException("Invalid crossover type")
-                    };
+                        isSame= false;
+                        break;
+                    }   
+                }
+                if (isSame)
+                {
+                    newPopulation.Add(first);
+                    continue;
                 }
 
-                if (mutationType == 0) mt.InsertionMutate(child, distancesSize, mutationRate);
-                if (mutationType == 1) mt.SwapMutate(child, distancesSize, mutationRate);*/
-                var child = first;
-
+                var childGTR = Crossover(first.GTR, second.GTR);
+                childGTR = Swap(childGTR);
+                var child = new Result(childGTR, null);
+                child.generateGreedyTimes(distances);
                 newPopulation.Add(child);
             }
 
@@ -116,16 +185,19 @@ public class Genetic
                 {
                     bestDistance = distance;
                     bestTour = individual;
+                    Console.WriteLine(distance);
                 }
 
-                if (distance < 2.5 * lastBest)
+
+                if (distance <  lastBest)
                 {
+                    
                     int randomIndex = generator.Next(population.Count);
                     population[randomIndex] = individual;
                 }
+
             }
         }
-
         return bestTour;
     }
 }
