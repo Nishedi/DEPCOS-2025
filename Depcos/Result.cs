@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Depcos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,5 +13,18 @@ public class Result
     {
         GTR = gtr;
         VehicleStartTimes = vehicleStartTimes;
+    }
+    public void generateGreedyTimes(double[,] distanceMatrix)
+    {
+        VehicleStartTimes = new List<double>();
+        for (int i = 0; i < GTR.Count() - 1; i++)
+        {
+            var customer = GTR[i];
+            var nextCustomer = GTR[i + 1];
+            if (customer.Id == 0)
+            {
+                VehicleStartTimes.Add(Math.Max(nextCustomer.bv - distanceMatrix[customer.Id, nextCustomer.Id], 0.0));
+            }
+        }
     }
 }

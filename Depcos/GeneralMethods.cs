@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 public class GeneralMethods
 {
+    Random random = new Random();
     public List<Customer> createGreedyGTR(double[,] distanceMatrix, List<Customer> Customers, List<double> vehicleStarts, List<Vehicle> Vehicles)
     {
         var InitialGTR = new List<Customer>();
@@ -98,6 +99,31 @@ public class GeneralMethods
             InitialGTR.Add(Customers[0]);
         }
 
+        return InitialGTR;
+    }
+
+    public List<Customer> createGreedyGTRMutated(double[,] distanceMatrix, List<Customer> Customers, List<double> vehicleStarts, List<Vehicle> Vehicles)
+    {
+        List<Customer> InitialGTR = createGreedyGTR(distanceMatrix, Customers, vehicleStarts, Vehicles);
+        vehicleStarts.Clear();
+        int i = random.Next(1, distanceMatrix.GetLength(0));
+        int j = i;
+        while (i == j)
+        {
+            j = random.Next(1, distanceMatrix.GetLength(0));
+        }
+        var toSwap = InitialGTR[i];
+        InitialGTR[i] = InitialGTR[j];
+        InitialGTR[j] = toSwap;
+        for (i = 0; i < InitialGTR.Count()-1; i++)
+        {
+            var customer = InitialGTR[i];
+            var nextCustomer = InitialGTR[i+1];
+            if (customer.Id == 0)
+            {
+                vehicleStarts.Add(Math.Max(nextCustomer.bv - distanceMatrix[customer.Id, nextCustomer.Id], 0.0));
+            }
+        }
         return InitialGTR;
     }
 

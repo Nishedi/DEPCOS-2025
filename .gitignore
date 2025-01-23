@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+.vs/Depcos/DesignTimeBuild/.dtbcache.v2
+.vs/Depcos/v17/.suo
