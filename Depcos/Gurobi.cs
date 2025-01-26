@@ -64,7 +64,6 @@ public class GurobiVRP
         GRBVar[,] d = new GRBVar[problem.NumberOfVehicles, locationsNumber];
         GRBVar[,] penB = new GRBVar[problem.NumberOfVehicles, locationsNumber];
         GRBVar[,] penD = new GRBVar[problem.NumberOfVehicles, locationsNumber];
-        GRBVar[] ser = new GRBVar[locationsNumber];
 
         // Create variable x[v, i, j]
         for (int v = 0; v < problem.NumberOfVehicles; v++)
@@ -136,12 +135,6 @@ public class GurobiVRP
             }
         }
 
-        // Create variable ser[i] - wyjazd po czasie
-        for (int i = 0; i < locationsNumber; i++)
-        {
-            ser[i] = model.AddVar(Convert.ToInt32(problem.Customers[i].ServiceTime), Convert.ToInt32(problem.Customers[i].ServiceTime), 0.0, GRB.INTEGER, "ser_" + i);
-        }
-
 
         model.Update();
 
@@ -160,7 +153,8 @@ public class GurobiVRP
             for (int i = 0; i < locationsNumber; i++)
             {
                 expr += y[v, i] * problem.Customers[i].ServiceTime;
-                expr += b[v, i] + d[v, i];
+                expr += problem.Customers[i].penalty * penB[v, i];
+                expr += problem.Customers[i].penalty * penD[v, i];
             }
         }
         model.SetObjective(expr, GRB.MINIMIZE);
@@ -182,6 +176,9 @@ public class GurobiVRP
             for (int i = 0; i < locationsNumber; i++)
             {
                 sum += y[v, i] * problem.Customers[i].ServiceTime;
+                expr += problem.Customers[i].penalty * penB[v, i];
+                expr += problem.Customers[i].penalty * penD[v, i];
+
             }  
             // Checking if the time is less than the vehicle working time. Vehicle 0 is take, because fleet is homogeneous
             model.AddConstr(sum, GRB.LESS_EQUAL, problem.Vehicles[0].wv, "c2");
@@ -312,9 +309,9 @@ public class GurobiVRP
                 model.AddConstr(t[v, i], GRB.LESS_EQUAL, problem.Customers[0].dv, "c11");
             }
         }
-        
 
-        // b must be greater than 0
+        // Add constraint 12 and 13
+        // b and penB must be greater than 0
         for (int v = 0; v < problem.NumberOfVehicles; v++)
         {
             for (int i = 0; i < locationsNumber; i++)
@@ -324,7 +321,8 @@ public class GurobiVRP
             }
         }
 
-        // b must be greater than 0
+        // Add constraint 14 and 15
+        // d and penD must be greater than 0
         for (int v = 0; v < problem.NumberOfVehicles; v++)
         {
             for (int i = 0; i < locationsNumber; i++)
@@ -334,28 +332,28 @@ public class GurobiVRP
             }
         }
 
-        // Add constraint 12
-        // Set time variables
+        // Add constraint 16 and 17
+        // Calculation of b variable and its penatly penB
         for (int v = 0; v < problem.NumberOfVehicles; v++)
         {
             for (int i = 1; i < locationsNumber; i++)
             {
                 GRBLinExpr sum = problem.Customers[i].bv - t[v, i] - 10000*(1 - y[v, i]);
                 model.AddConstr(b[v, i], GRB.GREATER_EQUAL, sum, "c16");
-                model.AddGenConstrMin(penB[v, i], new GRBVar[] { ser[i], b[v, i] }, problem.Customers[i].ServiceTime, "c17");
+                model.AddGenConstrMin(penB[v, i], new GRBVar[] {b[v, i]}, problem.Customers[i].ServiceTime, "c17");
 
             }
         }
 
-        // Add constraint 12
-        // Set time variables
+        // Add constraint 18 and 19
+        // Calculation of d variable and its penatly penD
         for (int v = 0; v < problem.NumberOfVehicles; v++)
         {
             for (int i = 1; i < locationsNumber; i++)
             {
                 GRBLinExpr sum = t[v, i] + problem.Customers[i].ServiceTime - problem.Customers[i].dv - 10000 * (1 - y[v, i]);
                 model.AddConstr(d[v, i], GRB.GREATER_EQUAL, sum, "c18");
-                model.AddGenConstrMin(penD[v, i], new GRBVar[] { ser[i], d[v, i] }, problem.Customers[i].ServiceTime, "c19");
+                model.AddGenConstrMin(penD[v, i], new GRBVar[] {d[v, i]}, problem.Customers[i].ServiceTime, "c19");
             }
         }
 
