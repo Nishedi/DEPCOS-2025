@@ -85,7 +85,7 @@ public class VRPTW
                         bv = double.Parse(parts[4], CultureInfo.InvariantCulture),
                         dv = double.Parse(parts[5], CultureInfo.InvariantCulture),
                         ServiceTime = double.Parse(parts[6], CultureInfo.InvariantCulture),
-                        penalty = 2
+                        penalty = 1
                     });
                 }
                 catch (FormatException ex)
