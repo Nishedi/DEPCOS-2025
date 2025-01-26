@@ -176,8 +176,8 @@ public class GurobiVRP
             for (int i = 0; i < locationsNumber; i++)
             {
                 sum += y[v, i] * problem.Customers[i].ServiceTime;
-                expr += problem.Customers[i].penalty * penB[v, i];
-                expr += problem.Customers[i].penalty * penD[v, i];
+                sum += problem.Customers[i].penalty * penB[v, i];
+                sum += problem.Customers[i].penalty * penD[v, i];
 
             }  
             // Checking if the time is less than the vehicle working time. Vehicle 0 is take, because fleet is homogeneous
@@ -227,6 +227,17 @@ public class GurobiVRP
 
         }
 
+        // Add constraint 6
+        // A vehicle must leve location only once
+        for (int v = 0; v < problem.NumberOfVehicles; v++)
+        {
+            GRBLinExpr sum = 0.0;
+            for (int i = 0; i < locationsNumber; i++)
+            {
+                sum += x[v, i, 0];
+            }
+            model.AddConstr(sum, GRB.LESS_EQUAL, 1.0, "c20");
+        }
 
         // Add constraint 6
         // A vehicle must not go to the same location

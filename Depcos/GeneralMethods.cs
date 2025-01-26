@@ -154,13 +154,15 @@ public class GeneralMethods
                 vehicleTime += distanceMatrix[prevCustomer.Id, customer.Id];
                 double upperTimeLeft = customer.dv - vehicleTime; // dodaktowy koszt za przekroczenie od gory okna
                 double lowerTimeLeft = customer.bv - vehicleTime; // dodatkowy koszt za przekroczenie od dolu okna
-                double penalty = Math.Max(0, customer.ServiceTime - upperTimeLeft); // naliczenie potencjalnej kary
+                //double penalty = Math.Max(0, customer.ServiceTime - upperTimeLeft); // naliczenie potencjalnej kary -> TO BE CHECKED
+                double penalty = Math.Max(0, Math.Min((customer.ServiceTime - upperTimeLeft), customer.ServiceTime)); // naliczenie potencjalnej kary -> MICHAL ADDED
                 penalty += Math.Max(0, Math.Min(lowerTimeLeft, customer.ServiceTime));
                 vehicleTime += customer.ServiceTime; // Wykonaj serwis
-                vehicleTime += penalty;
+                vehicleTime += customer.penalty * penalty; // -> MICHAL ADDED - penalty multiplication
                 prevCustomer = customer;
             }
         }
         return cost;
     }
+
 }

@@ -16,13 +16,13 @@ public class Program
 
         GeneralMethods gm = new GeneralMethods();
         vrptw = new VRPTW(filePath, 5);
-        /*
+        Console.WriteLine(vrptw.printDistanceMatrix());
         rs = tabuSearch.TabuSearch(vrptw.distanceMatrix, vrptw.Customers, vrptw.Vehicles, 10, 60, 1);
 
         Console.WriteLine(gm.calculateCostGTRv2(vrptw.distanceMatrix, rs.GTR, rs.VehicleStartTimes));
         Console.WriteLine(vrptw.printGTR(rs.GTR));
         Console.WriteLine();
-
+        /*
         rs = genetic.GeneticSolve(vrptw.distanceMatrix, vrptw.Customers, vrptw.Vehicles, 60);
         Console.WriteLine(gm.calculateCostGTRv2(vrptw.distanceMatrix, rs.GTR, rs.VehicleStartTimes));
         Console.WriteLine(vrptw.printGTR(rs.GTR));
