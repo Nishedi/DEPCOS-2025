@@ -48,12 +48,12 @@ public class Program
        
         GeneralMethods gm = new GeneralMethods();
         vrptw = new VRPTW(filePath, 5);
-
+        /*
         rs = tabuSearch.TabuSearch(vrptw.distanceMatrix, vrptw.Customers, vrptw.Vehicles, 10, 10, 1);
         Console.WriteLine(gm.calculateCostGTRv2(vrptw.distanceMatrix, rs.GTR, rs.VehicleStartTimes));
         Console.WriteLine(vrptw.printGTR(rs.GTR));
         Console.WriteLine();
-
+        */
         GurobiVRP gurobi1 = new GurobiVRP();
         double fCelu = gurobi1.gurobi_test(vrptw);
         Console.WriteLine("funkcja celu: ");

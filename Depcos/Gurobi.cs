@@ -81,7 +81,7 @@ public class GurobiVRP
         // Create variable y[v, i]
         for (int v = 0; v < problem.NumberOfVehicles; v++)
         {
-            for (int i = 0; i < locationsNumber; i++)
+            for (int i = 1; i < locationsNumber; i++)
             {
                 y[v, i] = model.AddVar(0.0, 1.0, 0.0, GRB.BINARY, "y_" + v + "_" + i);
 
@@ -216,14 +216,14 @@ public class GurobiVRP
         // Setting x variables depending on y variables
         for (int v = 0; v < problem.NumberOfVehicles; v++)
         {
-            for (int i = 0; i < locationsNumber; i++)
+            for (int i = 1; i < locationsNumber; i++)
             {
                 GRBLinExpr sum = 0.0;
                 for (int j = 0; j < locationsNumber; j++)
                 {
                     sum += x[v, j, i];
                 }
-                model.AddConstr(y[v,i], GRB.LESS_EQUAL, sum, "c4");
+                model.AddConstr(y[v,i], GRB.EQUAL, sum, "c4"); // bylo less equal
             }
         }
 
@@ -231,7 +231,7 @@ public class GurobiVRP
         // Vehicle must start from depot
         for (int v = 0; v < problem.NumberOfVehicles; v++)
         {
-            for (int i = 0; i < locationsNumber; i++)
+            for (int i = 1; i < locationsNumber; i++)
             {
                 GRBLinExpr sum = 0.0;
                 for (int j = 0; j < locationsNumber; j++)

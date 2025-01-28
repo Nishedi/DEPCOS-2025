@@ -81,23 +81,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\minec\\.nuget\\packages\\": {},
+    "C:\\Users\\MichałJaroszczuk\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\minec\\Desktop\\DEPCOS-2025-temp-name-\\Depcos\\Depcos.csproj",
+      "projectUniqueName": "C:\\Users\\MichałJaroszczuk\\source\\repos\\DEPCOS-2025-temp-name-\\Depcos\\Depcos.csproj",
       "projectName": "Depcos",
-      "projectPath": "C:\\Users\\minec\\Desktop\\DEPCOS-2025-temp-name-\\Depcos\\Depcos.csproj",
-      "packagesPath": "C:\\Users\\minec\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\minec\\Desktop\\DEPCOS-2025-temp-name-\\Depcos\\obj\\",
+      "projectPath": "C:\\Users\\MichałJaroszczuk\\source\\repos\\DEPCOS-2025-temp-name-\\Depcos\\Depcos.csproj",
+      "packagesPath": "C:\\Users\\MichałJaroszczuk\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\MichałJaroszczuk\\source\\repos\\DEPCOS-2025-temp-name-\\Depcos\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\minec\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\MichałJaroszczuk\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -106,6 +106,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -118,6 +119,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -140,12 +146,30 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[6.0.29, 6.0.29]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[6.0.29, 6.0.29]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[6.0.29, 6.0.29]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[6.0.29, 6.0.29]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204\\RuntimeIdentifierGraph.json"
       }
     }
   }
