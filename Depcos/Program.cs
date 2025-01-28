@@ -37,8 +37,8 @@ public class Program
     public static void Main()
     {
         //string filePath = "C101.txt";
-        //string filePath = "CTEST.txt";
-        string filePath = fileNames[0];
+        string filePath = "CTEST.txt";
+        //string filePath = fileNames[0];
         VRPTW vrptw = null;
 
         
