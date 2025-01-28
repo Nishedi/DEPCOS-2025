@@ -97,6 +97,13 @@ public class GeneralMethods
         if (InitialGTR[InitialGTR.Count - 1].Id != 0)
         {
             InitialGTR.Add(Customers[0]);
+            
+        }
+        InitialGTR.Add(Customers[0]);
+        vehicleStarts.Add(0.0);
+        foreach (var c in InitialGTR)
+        {
+            Console.Write(c.Id + " ");
         }
 
         return InitialGTR;

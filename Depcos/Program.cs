@@ -16,8 +16,8 @@ public class Program
        
         GeneralMethods gm = new GeneralMethods();
         vrptw = new VRPTW(filePath, 5);
-        
-        rs = tabuSearch.TabuSearch(vrptw.distanceMatrix, vrptw.Customers, vrptw.Vehicles, 10, 60, 1);
+
+        rs = tabuSearch.TabuSearch(vrptw.distanceMatrix, vrptw.Customers, vrptw.Vehicles, 10, 10, 1);
         Console.WriteLine(gm.calculateCostGTRv2(vrptw.distanceMatrix, rs.GTR, rs.VehicleStartTimes));
         Console.WriteLine(vrptw.printGTR(rs.GTR));
         Console.WriteLine();
