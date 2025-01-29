@@ -50,12 +50,15 @@ public class GurobiVRP
             Console.WriteLine();
         }
     }
-    public double gurobi_test(VRPTW problem)
+    public Tuple<double, double> gurobi_test(VRPTW problem)
     {
         // Generate all possible combinations
         GetCombination(problem.Customers);
         // Create a new model
         GRBModel model = new GRBModel(env);
+        // Set time limit
+        double minutes = 10;
+        model.Set(GRB.DoubleParam.TimeLimit, minutes * 60);
         int locationsNumber = problem.Customers.Count;
         GRBVar[, ,] x = new GRBVar[problem.NumberOfVehicles, locationsNumber, locationsNumber];
         GRBVar[,] y = new GRBVar[problem.NumberOfVehicles, locationsNumber];
@@ -223,7 +226,8 @@ public class GurobiVRP
                 {
                     sum += x[v, j, i];
                 }
-                model.AddConstr(y[v,i], GRB.EQUAL, sum, "c4"); // bylo less equal
+                // Less equal jesli jedna lokalizacja moze byc odwiedzona przez wiecej niz jedno auto
+                model.AddConstr(y[v,i], GRB.EQUAL, sum, "c4"); 
             }
         }
 
@@ -407,16 +411,19 @@ public class GurobiVRP
 
         // Optimize model
         model.Optimize();
-        // Print model variables
+
+        // Print model variables - to comment for experiments
         GRBVar[] vars = model.GetVars();
         foreach (var v in vars)
             Console.WriteLine(v.VarName + " = " + v.X);
-        double fCelu = model.ObjVal;
-        //model.Write("model.lp");
 
+        // Goal function value and operation time in seconds
+        double fCelu = model.ObjVal;
+        double operationTime = model.Runtime;
+        //model.Write("model.lp");
         // Dispose (Clean) of model and environment
         model.Dispose();
         env.Dispose();
-        return fCelu;
+        return new Tuple<double, double>(fCelu, operationTime);
     }   
 }

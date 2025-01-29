@@ -55,9 +55,11 @@ public class Program
         Console.WriteLine();
         */
         GurobiVRP gurobi1 = new GurobiVRP();
-        double fCelu = gurobi1.gurobi_test(vrptw);
+        var gurobiResult = gurobi1.gurobi_test(vrptw);
         Console.WriteLine("funkcja celu: ");
-        Console.WriteLine(fCelu);
+        Console.WriteLine(gurobiResult.Item1);
+        Console.WriteLine("czas obliczen w sekundach: ");
+        Console.WriteLine(gurobiResult.Item2);
         //gurobi1.printSubSets();
     }
 }
