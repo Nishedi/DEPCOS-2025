@@ -9,10 +9,17 @@ public class Result
 {
     public List<Customer> GTR { get; set; }
     public List<double> VehicleStartTimes { get; set; }
+    public double GreedyResult = int.MaxValue;
     public Result(List<Customer> gtr, List<double> vehicleStartTimes)
     {
         GTR = gtr;
         VehicleStartTimes = vehicleStartTimes;
+    }
+    public Result(List<Customer> gtr, List<double> vehicleStartTimes, double greedyResult)
+    {
+        GTR = gtr;
+        VehicleStartTimes = vehicleStartTimes;
+        GreedyResult = greedyResult;
     }
     public void generateGreedyTimes(double[,] distanceMatrix)
     {

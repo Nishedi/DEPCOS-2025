@@ -11,7 +11,13 @@ public class GurobiVRP
 
 {
     public List<List<int>> subSets = new List<List<int>>();
-    private static GRBEnv env = new GRBEnv();
+    private static GRBEnv env ;
+    public GurobiVRP()
+    {
+
+        env = new GRBEnv();
+        env.Set(GRB.IntParam.OutputFlag, 0);
+    }
 
     // Function that generates all possible combinations of customers
     public void GetCombination(List<Customer> customers)
@@ -414,8 +420,8 @@ public class GurobiVRP
 
         // Print model variables - to comment for experiments
         GRBVar[] vars = model.GetVars();
-        foreach (var v in vars)
-            Console.WriteLine(v.VarName + " = " + v.X);
+        /*foreach (var v in vars)
+            Console.WriteLine(v.VarName + " = " + v.X);*/
 
         // Goal function value and operation time in seconds
         double fCelu = model.ObjVal;

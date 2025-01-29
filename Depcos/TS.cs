@@ -144,7 +144,7 @@ public class TS
         List<double> bestVehicleStarts = new List<double>();
         currentSolution = gm.createGreedyGTR(distances, customers, vehicleStarts, vehicles);
         double currentSolutionLength = gm.calculateCostGTRv2(distances, currentSolution, vehicleStarts);
-        Console.WriteLine(currentSolutionLength);
+        double greedySolution = currentSolutionLength;
         if (bestSolution == null || currentSolutionLength < bestSolutionLength)
         {
             bestSolution = currentSolution;
@@ -214,7 +214,7 @@ public class TS
                 vehicleStartsTry[i] = bestValue;
             }
         }
-        return new Result(bestSolution, bestVehicleStarts);
+        return new Result(bestSolution, bestVehicleStarts, greedySolution);
     }
 }
 

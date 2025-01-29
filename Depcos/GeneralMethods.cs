@@ -99,12 +99,13 @@ public class GeneralMethods
             InitialGTR.Add(Customers[0]);
             
         }
-        InitialGTR.Add(Customers[0]);
-        vehicleStarts.Add(0.0);
-        foreach (var c in InitialGTR)
+        int count = InitialGTR.Count(e => e.Id == 0);
+        for(int i = 0; i < count*0.3; i++)
         {
-            Console.Write(c.Id + " ");
+            InitialGTR.Add(Customers[0]);
+            vehicleStarts.Add(0.0);
         }
+        count = InitialGTR.Count(e => e.Id == 0);
 
         return InitialGTR;
     }
